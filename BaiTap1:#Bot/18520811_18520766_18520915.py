@@ -1,35 +1,25 @@
-import re
+n = int(input())
 
-def read_data():
-    with open('input.txt', 'r') as file:
-        lines = file.readlines()
-
-    data_list = re.split('\s', lines[1])
-    filtered_list = list(filter(lambda y: y is not '', data_list))
-    res = list(map(lambda y: int(y), filtered_list))
-
-    return res
-
-def main():
-    from_var = 0
-    data = read_data()
-    res_data = {
-        'from': 1,
-        'to': len(data),
-        'sum': sum(data)
-    }
-
-    while len(data) > from_var:
-        for i in range(from_var, len(data)):
-            range_sum = sum(data[from_var: i])
-            if range_sum > res_data['sum']:
-                res_data['from'] = from_var + 1
-                res_data['to'] = i
-                res_data['sum'] = range_sum
-        from_var += 1
-
-    print(res_data)
+data = list(map(int, input().split()))
 
 
-if __name__ == "__main__":
-    main()
+max_so_far = - 1
+max_ending_here = 0
+start = 0
+end = 0
+s = 0
+
+for i in range(0,n):   
+    data[i] = int(data[i]) #convert str to int
+    max_ending_here += data[i] 
+
+    if max_so_far < max_ending_here:
+        max_so_far = max_ending_here 
+        start = s 
+        end = i 
+
+    if max_ending_here < 0:
+        max_ending_here = 0
+        s = i+1
+
+print (start+1, end+1, max_so_far)
