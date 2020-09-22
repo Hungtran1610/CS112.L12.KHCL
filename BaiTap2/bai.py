@@ -1,30 +1,23 @@
 import math
 
-global maximum 
+def lis(arr, n):
+    temp_list = [1 for x in range(0,n)]
+    i,j = 1,0
+    while i<len(arr) and j<len(arr):
+        if arr[j][1]<arr[i][1]:
+            if temp_list[j]+1>temp_list[i]:
+                temp_list[i] = temp_list[j]+1
+        j=j+1
+        if j==i:
+            j,i=0,i+1
+    return max(temp_list)
 
-def _lis(arr , n ): 
-    global maximum 
-    if n == 1 : 
-        return 1
-    maxEndingHere = 1
-    for i in range(1, n): 
-        res = _lis(arr , i) 
-        if arr[i-1][1] < arr[n-1][1] and res+1 > maxEndingHere: 
-            maxEndingHere = res +1
-    maximum = max(maximum , maxEndingHere) 
+def line_function(x, y, angle):
+    return y - math.tan(angle)*x
 
-    return maxEndingHere 
-
-def lis(arr):
-    global maximum 
-
-    n = len(arr) 
-
-    maximum = 1
-
-    _lis(arr , n) 
-
-    return maximum
+def translating(x, y, angle):
+    k = y/math.tan(angle) - x
+    return math.tan(angle)*k
 
 m = int(input())
 x, y = (input().split())
@@ -32,15 +25,16 @@ alpha1 = math.atan(eval(x))
 alpha2 = math.atan(eval(y))
 alpha3 = alpha2 - alpha1
 coordinates = [] 
-for i in range(m):
+for i in range(0,m):
     x, y = (input().split())
-    coordinates.append((int(x),int(y)))
+    if line_function(float(x), float(y), alpha1) < 0:
+        continue
+    if line_function(float(x), float(y), alpha2) > 0:
+        continue
+    y_ = translating(float(x), float(y), alpha2 - alpha1)
+    coordinates.append((float(x), float(y), y_))
 
-# coordinates.sort(key=lambda tup: tup[1])
-# final = lis(coordinates)
+coordinates.sort(key=lambda tup: tup[2], reverse=True)
+final = lis(coordinates, m)
 
-# print(final)
-
-# print(coordinates)
-# print(alpha1, alpha2)
-# print(m)
+print(final)
